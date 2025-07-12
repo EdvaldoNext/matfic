@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadoras e Tabuadas</title>
+<style>
+body {
+font-family: Arial, sans-serif;
+margin: 0;
+padding: 0;
+background-color: #f4f4f4;
+display: flex;
+flex-direction: column;
+align-items: center;
+min-height: 100vh;
+}
+nav {
+background-color: #333;
+width: 100%;
+padding: 10px 0;
+}
+nav a {
+color: white;
+text-decoration: none;
+padding: 10px 20px;
+margin: 0 10px;
+display: inline-block;
+}
+nav a:hover {
+background-color: #555;
+}
+.container {
+max-width: 800px;
+width: 90%;
+margin: 20px auto;
+padding: 20px;
+background-color: white;
+border-radius: 8px;
+box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+h1 {
+text-align: center;
+color: #333;
+}
+.tabuada-grid {
+display: grid;
+gap: 10px;
+margin-top: 20px;
+}
+@media (min-width: 768px) {
+.tabuada-grid {
+grid-template-columns: repeat(3, 1fr);
+}
+}
+@media (max-width: 767px) {
+.tabuada-grid {
+grid-template-columns: 1fr 1fr;
+}
+}
+.tabuada {
+background-color: #e9ecef;
+padding: 10px;
+border-radius: 5px;
+text-align: center;
+}
+.input-group {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 10px;
+margin-top: 20px;
+}
+input[type="number"] {
+padding: 10px;
+font-size: 16px;
+width: 100%;
+max-width: 200px;
+border: 1px solid #ccc;
+border-radius: 4px;
+}
+button {
+padding: 10px 20px;
+background-color: #28a745;
+color: white;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+}
+button:hover {
+background-color: #218838;
+}
+#resultado, #romano-resultado, #equacao-resultado, #horas-resultado {
+margin-top: 20px;
+font-size: 18px;
+color: #333;
+}
+.page {
+display: none;
+}
+.page.active {
+display: block;
+}
+.input-row {
+display: flex;
+gap: 10px;
+margin-bottom: 10px;
+flex-wrap: wrap;
+}
+@media (max-width: 767px) {
+.input-row {
+flex-direction: column;
+align-items: stretch;
+}
+#horas .input-row input {
+width: 100%;
+}
+#horas .input-row button {
+width: 100%;
+}
+}
+</style>
+</head>
+<body>
+<h1>Índice</h1>
+<nav>
+<a href="#" onclick="showPage('inicio')">Início</a>
+<a href="#" onclick="showPage('tabuada')">Tabuadas</a>
+<a href="#" onclick="showPage('raiz')">Raiz Quadrada</a>
+<a href="#" onclick="showPage('romano')">Números Romanos</a>
+<a href="#" onclick="showPage('equacao')">Equação 2º Grau</a>
+<a href="#" onclick="showPage('horas')">Calculadora de Horas</a>
+</nav>
+
+<div class="container">
+<!-- Página Inicial -->
+<!-- <div id="inicio" class="page active">
+<h1>Índice</h1>
+<ul>
+<li><a href="#" onclick="showPage('tabuada')">Tabuadas de 1 a 10</a></li>
+<li><a href="#" onclick="showPage('raiz')">Calcular Raiz Quadrada</a></li>
+<li><a href="#" onclick="showPage('romano')">Conversor para Números Romanos</a></li>
+<li><a href="#" onclick="showPage('equacao')">Calculadora de Equação do 2º Grau</a></li>
+<li><a href="#" onclick="showPage('horas')">Calculadora de Horas</a></li>
+</ul>
+</div>-->
+
+<!-- Página de Tabuadas -->
+<div id="tabuada" class="page">
+<h1>Tabuadas de 1 a 10</h1>
+<div class="tabuada-grid" id="tabuada-grid"></div>
+</div>
+
+<!-- Página de Raiz Quadrada -->
+<div id="raiz" class="page">
+<h1>Calcular Raiz Quadrada</h1>
+<div class="input-group">
+<input type="number" id="numero" placeholder="Digite um número" min="0">
+<button onclick="calcularRaiz()">Calcular</button>
+</div>
+<div id="resultado"></div>
+</div>
+
+<!-- Página de Números Romanos -->
+<div id="romano" class="page">
+<h1>Conversor para Números Romanos</h1>
+<div class="input-group">
+<input type="number" id="numero-romano" placeholder="Digite um número (1-3999)" min="1" max="3999">
+<button onclick="converterRomano()">Converter</button>
+</div>
+<div id="romano-resultado"></div>
+</div>
+
+<!-- Página de Equação do 2º Grau -->
+<div id="equacao" class="page">
+<h1>Calculadora de Equação do 2º Grau</h1>
+<div class="input-group">
+<div class="input-row">
+<input type="number" id="a" placeholder="a" required>
+<input type="number" id="b" placeholder="b" required>
+<input type="number" id="c" placeholder="c" required>
+</div>
+<button onclick="calcularEquacao()">Calcular</button>
+</div>
+<div id="equacao-resultado"></div>
+</div>
+
+<!-- Página de Calculadora de Horas -->
+<div id="horas" class="page">
+<h1>Calculadora de Horas</h1>
+<div class="input-group" id="horas-inputs">
+<div class="input-row">
+<input type="number" class="horas" placeholder="Horas" min="0">
+<input type="number" class="minutos" placeholder="Minutos" min="0" max="59">
+<button onclick="adicionarCampoHoras()">+</button>
+</div>
+</div>
+<div id="horas-resultado"></div>
+</div>
+</div>
+
+<script>
+// Função para alternar entre páginas
+function showPage(pageId) {
+document.querySelectorAll('.page').forEach(page => {
+page.classList.remove('active');
+});
+document.getElementById(pageId).classList.add('active');
+}
+
+// Equação do 2º Grau
+function calcularEquacao() {
+console.log("Função chamada"); // Depuração
+const a = parseFloat(document.getElementById('a').value) || 0;
+const b = parseFloat(document.getElementById('b').value) || 0;
+const c = parseFloat(document.getElementById('c').value) || 0;
+const raizDiv = document.getElementById('equacao-resultado');
+
+console.log("Valores:", a, b, c); // Depuração
+
+// Verifica se os valores são válidos
+if (isNaN(a) || isNaN(b) || isNaN(c) || a === 0) {
+raizDiv.innerHTML = 'Por favor, insira valores válidos (a ≠ 0).';
+return;
+}
+
+// Monta a equação
+const equacao = `${a}x² + ${b}x + ${c} = 0`;
+const delta = b * b - 4 * a * c;
+
+console.log("Delta:", delta); // Depuração
+
+if (delta < 0) {
+raizDiv.innerHTML = `${equacao}<br>Não existem raízes reais.`;
+} else if (delta === 0) {
+const x = -b / (2 * a);
+raizDiv.innerHTML = `${equacao}<br>Raiz única: x = ${x.toFixed(2)}`;
+} else {
+const x1 = (-b + Math.sqrt(delta)) / (2 * a);
+const x2 = (-b - Math.sqrt(delta)) / (2 * a);
+raizDiv.innerHTML = `${equacao}<br>Raízes: x₁ = ${x1.toFixed(2)}, x₂ = ${x2.toFixed(2)}`;
+}
+}
+
+// Tabuadas
+function gerarTabuadas() {
+const grid = document.getElementById('tabuada-grid');
+grid.innerHTML = '';
+for (let i = 1; i <= 10; i++) {
+let tabuadaHTML = `<h3>Tabuada do ${i}</h3>`;
+for (let j = 1; j <= 10; j++) {
+tabuadaHTML += `<p>${i} x ${j} = ${i * j}</p>`;
+}
+const tabuadaDiv = document.createElement('div');
+tabuadaDiv.classList.add('tabuada');
+tabuadaDiv.innerHTML = tabuadaHTML;
+grid.appendChild(tabuadaDiv);
+}
+}
+
+// Raiz Quadrada
+function calcularRaiz() {
+const numero = parseFloat(document.getElementById('numero').value);
+const resultadoDiv = document.getElementById('resultado');
+if (isNaN(numero) || numero < 0) {
+resultadoDiv.innerHTML = 'Por favor, insira um número válido (não negativo).';
+} else {
+const raiz = Math.sqrt(numero);
+resultadoDiv.innerHTML = `A raiz quadrada de ${numero} é ${raiz.toFixed(4)}.`;
+}
+}
+
+// Números Romanos
+function converterRomano() {
+const numero = parseInt(document.getElementById('numero-romano').value);
+const romanoDiv = document.getElementById('romano-resultado');
+if (isNaN(numero) || numero < 1 || numero > 3999) {
+romanoDiv.innerHTML = 'Por favor, insira um número entre 1 e 3999.';
+return;
+}
+const romanos = [
+['M', 1000], ['CM', 900], ['D', 500], ['CD', 400],
+['C', 100], ['XC', 90], ['L', 50], ['XL', 40],
+['X', 10], ['IX', 9], ['V', 5], ['IV', 4], ['I', 1]
+];
+let resultado = '';
+let num = numero;
+for (let [simbolo, valor] of romanos) {
+while (num >= valor) {
+resultado += simbolo;
+num -= valor;
+}
+}
+romanoDiv.innerHTML = `Número romano: ${resultado}`;
+}
+
+// Calculadora de Horas
+function adicionarCampoHoras() {
+const container = document.getElementById('horas-inputs');
+const row = document.createElement('div');
+row.classList.add('input-row');
+row.innerHTML = `
+<input type="number" class="horas" placeholder="Horas" min="0">
+<input type="number" class="minutos" placeholder="Minutos" min="0" max="59">
+<button onclick="this.parentElement.remove()">-</button>
+`;
+container.appendChild(row);
+calcularHoras();
+}
+
+function calcularHoras() {
+const horasInputs = document.querySelectorAll('.horas');
+const minutosInputs = document.querySelectorAll('.minutos');
+let totalHoras = 0;
+let totalMinutos = 0;
+
+horasInputs.forEach(input => {
+totalHoras += parseInt(input.value) || 0;
+});
+minutosInputs.forEach(input => {
+totalMinutos += parseInt(input.value) || 0;
+});
+
+totalHoras += Math.floor(totalMinutos / 60);
+totalMinutos = totalMinutos % 60;
+document.getElementById('horas-resultado').innerHTML = `Total: ${totalHoras} horas e ${totalMinutos} minutos`;
+}
+
+// Inicializa as tabuadas ao carregar a página
+window.onload = gerarTabuadas;
+document.querySelectorAll('input').forEach(input => input.addEventListener('input', calcularHoras));
+</script>
+</body>
+</html>
